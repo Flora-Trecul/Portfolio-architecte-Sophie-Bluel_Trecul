@@ -135,8 +135,36 @@ li:hover {
 
 .gallery img {
 	width: 100%;
-
 }
+
+/* Ajout du CSS pour la barre de filtres */
+.filtersBar {
+	display: flex;
+	justify-content: center;
+	margin: 50px 0;
+	gap: 10px;
+}
+
+/* Affichage des boutons de filtres par défaut */
+.filter {
+	border-radius: 60px;
+	border: 1px solid #1D6154;
+	font-family: 'Syne';
+	color: #1D6154;
+	background-color: white;
+	font-weight: 700;
+	font-size: 16px;
+	padding: 9px;
+	min-width: 100px;
+}
+
+/* Affichage des boutons de filtres lorsqu'ils sont sélectionnés
+(utilisation de toggle avec le JS pour ajouter ou enlever la classe selected */
+button.selected {
+	background-color: #1D6154;
+	color: white;
+}
+
 #contact {
 	width: 50%;
 margin: auto;

@@ -23,43 +23,63 @@ time, mark, audio, video {
 	font: inherit;
 	vertical-align: baseline;
 }
+
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
 	display: block;
 }
+
 body {
 	line-height: 1;
 }
+
 ol, ul {
 	list-style: none;
 }
+
 blockquote, q {
 	quotes: none;
 }
+
 blockquote:before, blockquote:after,
 q:before, q:after {
 	content: '';
 	content: none;
 }
+
 table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
+
 /** end reset css**/
+
 body {
-	max-width: 1140px;
-	margin:auto;
+	margin: auto;
 	font-family: 'Work Sans' ;
 	font-size: 14px;
+	background-color: #FFFEF8;
+	min-height: 100vh;
+	display: grid;
+	grid-template-rows: 1fr auto;
 }
-header {
+
+#header-main {
+	max-width: 1140px;
+	width: 100%;
+	margin: auto;
+	margin-top: 0;
+}
+
+.header-normal {
 	display: flex;
 	justify-content: space-between;
-	margin: 50px 0
+	padding: 30px 0 50px 0;
 }
+
 section {
-	margin: 50px 0
+	padding: 50px 0;
 }
 
 h1{
@@ -68,43 +88,50 @@ h1{
 	font-family: 'Syne';
 	font-size: 22px;
 	font-weight: 800;
-	color: #B1663C
+	color: #B1663C;
 }
 
 h1 > span {
 	font-family: 'Work Sans';
 	font-size:10px;
 	letter-spacing: 0.1em;
-;
 }
 
 h2{
 	font-family: 'Syne';
 	font-weight: 700;
 	font-size: 30px;
-	color: #1D6154
+	color: #1D6154;
 }
+
 nav ul {
 	display: flex;
 	align-items: center;
 	list-style-type: none;
-
 }
+
 nav li {
 	padding: 0 10px;
 	font-size: 1.2em;
 }
 
+li img {
+	height: 22px;
+}
+
 li:hover {
 	color: #B1663C;
 }
+
 #introduction {
 	display: flex;
 	align-items: center;
 }
+
 #introduction figure {
-	flex: 1
+	flex: 1;
 }
+
 #introduction img {
 	display: block;
 	margin: auto;
@@ -112,8 +139,9 @@ li:hover {
 }
 
 #introduction article {
-	flex: 1
+	flex: 1;
 }
+
 #introduction h2 {
 	margin-bottom: 1em;
 }
@@ -121,10 +149,11 @@ li:hover {
 #introduction p {
 	margin-bottom: 0.5em;
 }
+
 #portfolio h2 {
 	text-align: center;
-	margin-bottom: 1em;
 }
+
 .gallery {
 	width: 100%;
 	display: grid;
@@ -151,7 +180,7 @@ li:hover {
 	border: 1px solid #1D6154;
 	font-family: 'Syne';
 	color: #1D6154;
-	background-color: white;
+	background-color: inherit;
 	font-weight: 700;
 	font-size: 16px;
 	padding: 9px;
@@ -165,33 +194,37 @@ button.selected {
 	color: white;
 }
 
-#contact {
-	width: 50%;
-margin: auto;
+#contact, #login {
+	width: 33%;
+	margin: auto;
 }
+
 #contact > * {
 	text-align: center;
-
 }
+
 #contact h2{
 	margin-bottom: 20px;
 }
-#contact form {
+
+#contact form, #login form {
 	text-align: left;
 	margin-top:30px;
 	display: flex;
 	flex-direction: column;
 }
 
-#contact input {
+#contact input, #login input {
 	height: 50px;
 	font-size: 1.2em;
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
-#contact label {
+
+#contact label, #login label {
 	margin: 2em 0 1em 0;
 }
+
 #contact textarea {
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
@@ -205,12 +238,62 @@ input[type="submit"]{
 	margin : 2em auto ;
 	width: 180px;
 	text-align: center;
-	border-radius: 60px ;
+	border-radius: 60px;
+}
+
+footer {
+	background-color: white;
+}
+
+footer nav {
+	max-width: 1140px;
+	margin: auto;
 }
 
 footer nav ul {
 	display: flex;
 	justify-content: flex-end;
-	margin: 2em
+	padding: 2em;
 }
 
+/** Ajout CSS pour la page formulaire **/
+
+#login h2 {
+	margin-bottom: 1em;
+	text-align: center;
+}
+
+.forgot-password {
+	text-decoration: underline;
+	text-align: center;
+}
+
+.forgot-password:hover {
+	cursor: pointer;
+}
+
+strong {
+	font-weight: 600;
+}
+
+/* Ajout CSS pour page d'accueil en mode édition */
+
+.edit-mode {
+	background-color: black;
+	color: white;
+	text-align: center;
+	padding: 22px;
+	font-size: 16px;
+}
+
+.edit-title {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-bottom: 1em;
+	gap: 30px;
+}
+
+.edit {
+	display: none;
+}

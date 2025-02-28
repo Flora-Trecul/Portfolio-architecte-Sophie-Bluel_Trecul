@@ -36,7 +36,7 @@ function createFiltersBar() {
     const filtersBar = document.createElement("div")
     filtersBar.className = "filtersBar"
     // On ajoute le premier bouton "Tous" avec le data-id 0
-    filtersBar.innerHTML = "<button class=\"filter\" data-cat=\"0\">Tous</button>"
+    filtersBar.innerHTML = "<button class=\"filter selected\" data-cat=\"0\">Tous</button>"
 
     // On crée un bouton pour chaque catégorie
     categories.forEach(category => {

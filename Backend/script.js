@@ -2,8 +2,9 @@
 const works = await fetch("http://localhost:5678/api/works").then(works => works.json())
 // On récupère les catégories depuis l'API
 const categories = await fetch("http://localhost:5678/api/categories").then(categories => categories.json())
-// On récupère la div gallery du HTML (en dehors des fonctions car on en aura besoin pour plusieurs fonctions)
+// On récupère les div gallery du HTML (en dehors des fonctions car on en aura besoin pour plusieurs fonctions)
 const gallery = document.querySelector(".gallery")
+const modalGallery = document.querySelector(".galleryModal")
 
 // Fonction pour ajouter chaque objet de l'API works à la galerie
 function generateGallery(work) {
@@ -29,7 +30,7 @@ function generateGallery(work) {
 }
 
 // Fonction pour créer la barre de filtres
-function createFiltersBar() {
+function generateFiltersBar() {
     // On récupère la div portfolio pour lui insérer un nouvel élément enfant
     const portfolio = document.getElementById("portfolio")
     // On crée une div pour la barre de filtres, on lui attribue la classe filters
@@ -52,7 +53,7 @@ function createFiltersBar() {
     })
 }
 
-// Fonction pour remplacer le contenu de la galerie
+// Fonction pour vider le contenu de la galerie quand on sélectionne un filtre
 function replaceGallery(works) {
     // Si l'utilisateur clique sur un bouton sélectionné, la page ne change pas
     if (gallery.childElementCount !== works.length) {
@@ -76,7 +77,7 @@ function filterWorks(btnFilter) {
     }
 }
 
-//Fonction pour réagir au clic sur les filtres
+// Fonction pour activer les filtres au clic
 function activateFilters() {
     // On récupère tous les boutons pour activer la fonctionnalité de filtrage
     const btnsFilters = document.querySelectorAll("button")
@@ -97,6 +98,16 @@ function activateFilters() {
     })
 }
 
+// FONCTION GLOBALE GESTION GALERIE & FILTRES
+function manageGallery() {
+    // On crée la galerie de travaux
+    works.forEach(generateGallery)
+    // On crée la barre de filtres
+    generateFiltersBar()
+    // On active les filtres
+    activateFilters()
+}
+
 // Fonction pour déconnecter l'utilisateur lorsqu'il clique sur "logout" dans le menu de navigation
 function logout(link) {
     link.addEventListener("click", () => {
@@ -105,9 +116,58 @@ function logout(link) {
     })
 }
 
-// Fonction pour afficher le mode édition si un token est enregistré dans le localStorage
+// Fonction pour générer la galerie miniature de la fenêtre modale
+function generateGalleryModal(work) {
+    // On crée un élément HTML figure avec attribut data-id = propriété id de l'objet
+    const figureWork = document.createElement("figure")
+    figureWork.dataset.img = work.id
+
+    // On crée un élément img avec attribut src = propriété imageUrl de l'objet + attribut alt = propriété title
+    const imgWork = document.createElement("img")
+    imgWork.src = work.imageUrl
+    imgWork.alt = work.title
+
+    // On crée le bouton qui permettra de supprimer des projets
+    const btnDelete = document.createElement("button")
+    btnDelete.className = "delete"
+    btnDelete.innerHTML = `<i class="fa-solid fa-trash-can"></i>`
+
+    // On utilise appendChild pour définir img et button comme enfants de figure
+    figureWork.appendChild(imgWork)
+    figureWork.appendChild(btnDelete)
+
+    // On utilise appendChild pour définir figure comme enfant de gallery
+    modalGallery.appendChild(figureWork)
+}
+
+// Fonction pour ouvrir la fenêtre modale au clic sur "modifier" puis la ferme au clic sur la croix ou en dehors de la modale
+function toggleModal() {
+    // On modifie le display de la modale en cliquant sur "modifier"
+    const btnModal = document.querySelector("a[href=\"#modal\"]")
+    const modal = document.getElementById("modal-container")
+    btnModal.addEventListener("click", () => {
+        modal.style.display = "block"
+        // À l'ouverture de la modale, on génère la galerie de miniatures si elle est vide
+        if(modalGallery.childElementCount === 0) {
+            works.forEach(generateGalleryModal)
+        }
+    })
+    // On ferme la modale en cliquant sur le bouton close
+    const btnClose = document.querySelector(".close")
+    btnClose.addEventListener("click", () => {
+        modal.style.display = "none"
+    })
+    // On ferme la modale en cliquant sur l'overlay
+    window.addEventListener("click", e => {
+        if (e.target === modal) {
+            modal.style.display = "none"
+        }
+    })
+}
+
+// FONCTION GLOBALE GESTION MODE EDITION
 function displayEditMode() {
-    // On vérifie s'il existe une clé token
+    // On vérifie si un token est enregistré dans le localStorage
     if(window.localStorage.getItem("token") !== null) {
         // Si oui, on récupère tous les éléments avec une classe commençant par "edit-" et on ajoute la classe générique "edit"
         // (permet d'anticiper des ajouts sur le mode édition)
@@ -120,13 +180,14 @@ function displayEditMode() {
         loginLink.children[0].innerText = "logout"
         // On appelle la fonction de déconnexion si on clique sur "logout"
         logout(loginLink)
+        // On appelle la fonction qui ouvre/ferme la modale
+        toggleModal()
     }
 }
 
 
-
-// Appel aux fonctions pour ajouter tous les travaux à la galerie + créer la barre de filtres + activer les filtres
-works.forEach(generateGallery)
-createFiltersBar()
-activateFilters()
+// APPEL FONCTIONS GLOBALES
+// On génère la galerie et les filtres
+manageGallery()
+// On gère le mode édition et l'affichage de la modale
 displayEditMode()

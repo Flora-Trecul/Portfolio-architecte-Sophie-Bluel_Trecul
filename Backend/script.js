@@ -97,6 +97,14 @@ function activateFilters() {
     })
 }
 
+// Fonction pour déconnecter l'utilisateur lorsqu'il clique sur "logout" dans le menu de navigation
+function logout(link) {
+    link.addEventListener("click", () => {
+        // On déconnecte l'utilisateur = on enlève le token du localStorage
+        window.localStorage.removeItem("token")
+    })
+}
+
 // Fonction pour afficher le mode édition si un token est enregistré dans le localStorage
 function displayEditMode() {
     // On vérifie s'il existe une clé token
@@ -107,8 +115,14 @@ function displayEditMode() {
         editElements.forEach(element => {
             element.classList.add("edit")
         })
+        // On modifie aussi le "login" du menu de navigation
+        const loginLink = document.querySelector("a[href=\"login.html\"]")
+        loginLink.children[0].innerText = "logout"
+        // On appelle la fonction de déconnexion si on clique sur "logout"
+        logout(loginLink)
     }
 }
+
 
 
 // Appel aux fonctions pour ajouter tous les travaux à la galerie + créer la barre de filtres + activer les filtres

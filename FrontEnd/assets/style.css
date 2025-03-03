@@ -57,7 +57,7 @@ table {
 
 body {
 	margin: auto;
-	font-family: 'Work Sans' ;
+	font-family: 'Work Sans';
 	font-size: 14px;
 	background-color: #FFFEF8;
 	min-height: 100vh;
@@ -68,6 +68,10 @@ body {
 a {
 	color: inherit;
 	text-decoration: none;
+}
+
+main {
+	margin: 0 100px;
 }
 
 #header-main {
@@ -111,8 +115,10 @@ h2{
 
 nav ul {
 	display: flex;
+	justify-content: center;
 	align-items: center;
 	list-style-type: none;
+	gap: 25px;
 }
 
 nav li {
@@ -121,7 +127,7 @@ nav li {
 }
 
 li img {
-	height: 22px;
+	height: 18px;
 }
 
 li:hover {
@@ -130,29 +136,26 @@ li:hover {
 
 #introduction {
 	display: flex;
+	justify-content: flex-start;
+	gap: 70px;
 	align-items: center;
 }
 
-#introduction figure {
-	flex: 1;
-}
-
 #introduction img {
-	display: block;
-	margin: auto;
-	width: 80%;
+	width: 100%;
 }
 
 #introduction article {
-	flex: 1;
+	width: 85%;
 }
 
 #introduction h2 {
-	margin-bottom: 1em;
+	margin-bottom: 0.7em;
 }
 
 #introduction p {
-	margin-bottom: 0.5em;
+	margin-bottom: 1.2em;
+	line-height: 16px;
 }
 
 #portfolio h2 {
@@ -162,13 +165,18 @@ li:hover {
 .gallery {
 	width: 100%;
 	display: grid;
-	grid-template-columns: 1fr 1fr 1fr;
-	grid-column-gap: 20px;
-	grid-row-gap: 20px;
+	grid-template-columns: repeat(3, 1fr);
+	grid-column-gap: 18px;
+	grid-row-gap: 18px;
 }
 
 .gallery img {
 	width: 100%;
+}
+
+figcaption {
+	font-size: 13px;
+	padding-top: 5px;
 }
 
 /* Ajout du CSS pour la barre de filtres */
@@ -219,7 +227,7 @@ button.selected {
 	flex-direction: column;
 }
 
-#contact input, #login input {
+input {
 	height: 50px;
 	font-size: 1.2em;
 	border: none;
@@ -312,4 +320,94 @@ strong {
 
 .edit {
 	display: block;
+}
+
+/* Ajout CSS pour fenêtre modale */
+
+#modal-container {
+	display: none;
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0,0,0,0.3);
+}
+
+#modal {
+	position: fixed;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%); /* left-top-transform : centrer la fenêtre modale sur l'écran*/
+	width: 50%;
+	max-width: 630px;
+	height: auto;
+	max-height: 75%;
+	border-radius: 10px;
+	background-color: white;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+#modal .close {
+	font-size: 24px;
+	font-weight: 600;
+	padding-top: 21px;
+	padding-right: 25px;
+	align-self: flex-end;
+}
+
+.close:hover {
+	cursor: pointer;
+}
+
+#modal h2 {
+	font-family: 'Work Sans';
+	color: black;
+	font-size: 26px;
+	font-weight: 400;
+}
+
+#modal .galleryModal {
+	width: 67%;
+	max-width: 420px;
+	border-bottom: solid 1px #B3B3B3;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 9px;
+	margin-top: 3em;
+	padding-bottom: 3.1em;
+	overflow: auto;
+}
+
+.galleryModal figure {
+	width: calc(20% - 9px);
+	height: fit-content;
+	padding-bottom: 16px;
+	position: relative;
+}
+
+.galleryModal img {
+	width: 100%;
+}
+
+.delete {
+	position: absolute;
+	color: white;
+	background-color: black;
+	border: none;
+	border-radius: 3px;
+	padding: 3px 5px;
+	font-size: 10px;
+	top: 5%;
+	right: 5%;
+}
+
+#modal input {
+	width: 37%;
+	max-width: 237px;
+	height: 36px;
+	font-size: 14px;
+	flex-shrink: 0;
+	margin: 2.8em auto;
+	align-self: flex-end;
 }

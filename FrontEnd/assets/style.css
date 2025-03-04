@@ -208,7 +208,7 @@ button.selected {
 }
 
 #contact, #login {
-	width: 33%;
+	width: 40%;
 	margin: auto;
 }
 
@@ -220,21 +220,21 @@ button.selected {
 	margin-bottom: 20px;
 }
 
-#contact form, #login form {
+form {
 	text-align: left;
-	margin-top:30px;
+	margin-top: 30px;
 	display: flex;
 	flex-direction: column;
 }
 
-input {
+input, select {
 	height: 50px;
 	font-size: 1.2em;
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
 
-#contact label, #login label {
+label {
 	margin: 2em 0 1em 0;
 }
 
@@ -243,7 +243,7 @@ input {
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
 
-input[type="submit"]{
+main input[type="submit"] {
 	font-family: 'Syne';
 	font-weight: 700;
 	color: white;
@@ -332,7 +332,7 @@ strong {
 	background-color: rgba(0,0,0,0.3);
 }
 
-#modal {
+.modal {
 	position: fixed;
 	left: 50%;
 	top: 50%;
@@ -345,10 +345,9 @@ strong {
 	background-color: white;
 	display: flex;
 	flex-direction: column;
-	align-items: center;
 }
 
-#modal .close {
+.modal .close {
 	font-size: 24px;
 	font-weight: 600;
 	padding-top: 21px;
@@ -360,33 +359,55 @@ strong {
 	cursor: pointer;
 }
 
-#modal h2 {
+#modal-delete, #modal-add {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+#modal-add {
+	display: none;
+}
+
+.modal h2 {
 	font-family: 'Work Sans';
 	color: black;
 	font-size: 26px;
 	font-weight: 400;
+	margin-bottom: 1.5em;
 }
 
-#modal .galleryModal {
-	width: 67%;
+.modal-content {
+	width: 100%;
 	max-width: 420px;
+	height: auto;
+}
+
+.gallery-modal, .form-inputs {
 	border-bottom: solid 1px #B3B3B3;
+	padding-bottom: 3.1em;
 	display: flex;
+}
+
+.form-inputs {
+	flex-direction: column;
+}
+
+.gallery-modal {
 	flex-wrap: wrap;
 	gap: 9px;
-	margin-top: 3em;
-	padding-bottom: 3.1em;
 	overflow: auto;
 }
 
-.galleryModal figure {
+.gallery-modal figure {
 	width: calc(20% - 9px);
 	height: fit-content;
 	padding-bottom: 16px;
 	position: relative;
 }
 
-.galleryModal img {
+.gallery-modal img {
 	width: 100%;
 }
 
@@ -402,12 +423,83 @@ strong {
 	right: 5%;
 }
 
-#modal input {
-	width: 37%;
+.btn-modal-add {
+	font-family: 'Syne';
+	font-weight: 700;
+	font-size: 14px;
+	color: white;
+	background-color: #1D6154;
+	text-align: center;
+	border: none;
+	border-radius: 60px;
+	width: 60%;
 	max-width: 237px;
 	height: 36px;
-	font-size: 14px;
 	flex-shrink: 0;
-	margin: 2.8em auto;
-	align-self: flex-end;
+	margin: 2.6em auto 3em auto;
+}
+
+#modal-add .btn-modal-add {
+	background-color: #A7A7A7;
+}
+
+#modal-add form {
+	margin-top: 0;
+}
+
+.select-container {
+	position: relative;
+	display: inline-block;
+}
+
+select {
+	background-color: white;
+	appearance: none;
+	width: 100%;
+}
+
+.fa-chevron-down {
+	position: absolute;
+	color: #6C6C6C;
+	font-size: 12px;
+	top: 50%;
+	transform: translateY(-50%);
+	right: 20px;
+	pointer-events: none; /* Pour que le clic sur l'icone ne bloque pas l'activation de liste déroulante */
+}
+
+.upload-photo {
+	background-color: #E8F1F6;
+	padding: 1.5em;
+	border-radius: 3px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 5px;
+}
+
+.upload-photo input {
+	display: none;
+}
+
+.upload-photo button {
+	background-color: #CBD6DC;
+	color: #306685;
+	border: none;
+	border-radius: 50px;
+	font-size: 14px;
+	font-family: 'Work Sans';
+	padding: 10px;
+	width: 50%;
+	max-width: 173px;
+}
+
+.fa-image {
+	color: #B9C5CC;
+	font-size: 65px;
+}
+
+.upload-photo p {
+	font-size: 10px;
+	color: #444444;
 }

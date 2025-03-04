@@ -4,7 +4,7 @@ const works = await fetch("http://localhost:5678/api/works").then(works => works
 const categories = await fetch("http://localhost:5678/api/categories").then(categories => categories.json())
 // On récupère les div gallery du HTML (en dehors des fonctions car on en aura besoin pour plusieurs fonctions)
 const gallery = document.querySelector(".gallery")
-const modalGallery = document.querySelector(".galleryModal")
+const modalGallery = document.querySelector(".gallery-modal")
 
 // Fonction pour ajouter chaque objet de l'API works à la galerie
 function generateGallery(work) {
@@ -79,8 +79,8 @@ function filterWorks(btnFilter) {
 
 // Fonction pour activer les filtres au clic
 function activateFilters() {
-    // On récupère tous les boutons pour activer la fonctionnalité de filtrage
-    const btnsFilters = document.querySelectorAll("button")
+    // On récupère tous les boutons de la barre de filtres pour activer la fonctionnalité de filtrage
+    const btnsFilters = document.querySelectorAll("button[class=\"filter\"]")
     // Pour chaque bouton, on réagit au clic en ajoutant la classe "selected" ou en l'enlevant si elle est déjà activée
     btnsFilters.forEach(btnFilter => {
         btnFilter.addEventListener("click", () => {
@@ -111,8 +111,8 @@ function manageGallery() {
 // Fonction pour déconnecter l'utilisateur lorsqu'il clique sur "logout" dans le menu de navigation
 function logout(link) {
     link.addEventListener("click", () => {
-        // On déconnecte l'utilisateur = on enlève le token du localStorage
-        window.localStorage.removeItem("token")
+        // On déconnecte l'utilisateur = on enlève le token du sessionStorage
+        window.sessionStorage.removeItem("token")
     })
 }
 
@@ -163,12 +163,53 @@ function toggleModal() {
             modal.style.display = "none"
         }
     })
+    // On affiche le formulaire d'ajout de photo en cliquant sur le bouton "Ajouter une photo"
+    const btnAddModal = document.querySelector(".btn-modal-add")
+    btnAddModal.addEventListener("click", () => {
+        // On récupère les deux fenêtres de la modale pour cacher la fenêtre de suppression et afficher celle d'ajout de photos
+        const modalDelete = document.getElementById("modal-delete")
+        const modalAdd = document.getElementById("modal-add")
+        modalDelete.style.display = "none"
+        modalAdd.style.display = "flex"
+
+        // On génère les catégories dans l'élément select du formulaire
+        const selectCategory = document.querySelector("select")
+        // On vérifie que la liste déroulante contient uniquement le champ vide par défaut défini dans le HTML
+        if(selectCategory.childElementCount === 1) {
+            categories.forEach(category => {
+                // Pour chaque catégorie, on crée un élément option contenant le nom de la catégorie
+                const optionCategory = document.createElement("option")
+                optionCategory.innerText = category.name
+                // On ajoute deux attributs data-cat = id de la catégorie + value = nom de la catégorie en minuscules
+                optionCategory.dataset.cat = category.id
+                optionCategory.value = category.name.toLowerCase()
+                // On ajoute ce nouvel élément option à l'élément select du formulaire
+                selectCategory.appendChild(optionCategory)
+            })
+        }
+        
+
+        // On inverse à nouveau le display à la fermeture de la fenêtre en cliquant sur le bouton close
+        btnClose.addEventListener("click", () => {
+            modalAdd.style.display = "none"
+            modalDelete.style.display = "flex"
+            modal.style.display = "none"
+        })
+        // Idem en cliquant sur l'overlay
+        window.addEventListener("click", e => {
+            if (e.target === modal) {
+                modalAdd.style.display = "none"
+                modalDelete.style.display = "flex"
+                modal.style.display = "none"
+            }
+        })
+    })
 }
 
 // FONCTION GLOBALE GESTION MODE EDITION
 function displayEditMode() {
-    // On vérifie si un token est enregistré dans le localStorage
-    if(window.localStorage.getItem("token") !== null) {
+    // On vérifie si un token est enregistré dans le sessçonStorage
+    if(window.sessionStorage.getItem("token") !== null) {
         // Si oui, on récupère tous les éléments avec une classe commençant par "edit-" et on ajoute la classe générique "edit"
         // (permet d'anticiper des ajouts sur le mode édition)
         const editElements = document.querySelectorAll("[class^=edit-]")

@@ -9,16 +9,18 @@ async function processAPIresponse(response) {
         // Si les identifiants sont valides, on stocke le tocken dans le sessionStorage
         response = await response.json()
         const token = response.token
-        window.localStorage.setItem("token", token)
+        window.sessionStorage.setItem("token", token)
         // Puis on renvoie l'utilisateur sur la page d'accueil
         window.location.href = "index.html"
     } else {
-        // Si les identifiants sont incorrects, on affiche un message d'erreur pour l'utilisateur
-        const errorMsg = document.createElement("p")
-        errorMsg.className = "error"
-        errorMsg.innerText = "Erreur dans l'identifiant ou le mot de passe"
-        const forgotPassword = document.querySelector(".forgot-password")
-        login.insertBefore(errorMsg,forgotPassword)
+        // Si les identifiants sont incorrects, on affiche un message d'erreur pour l'utilisateur (s'il n'y en a pas déjà un)
+        if(document.querySelector(".error") === null) {
+            const errorMsg = document.createElement("p")
+            errorMsg.className = "error"
+            errorMsg.innerText = "Erreur dans l'identifiant ou le mot de passe"
+            const forgotPassword = document.querySelector(".forgot-password")
+            login.insertBefore(errorMsg,forgotPassword)
+        }
     }
 }
 

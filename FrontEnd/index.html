@@ -15,11 +15,36 @@
 <body>
 	<aside>
 		<div id="modal-container">
-			<div id="modal">
+			<div class="modal">
 				<div class="close">&times;</div>
-				<h2>Galerie photo</h2>
-				<div class="galleryModal"></div>
-				<input type="submit" value="Ajouter une photo">
+				<div id="modal-delete">
+					<h2>Galerie photo</h2>
+					<div class="gallery-modal modal-content"></div>
+					<button class="btn-modal-add">Ajouter une photo</button>
+				</div>
+				<div id="modal-add">
+					<h2>Ajout photo</h2>
+					<form class="modal-content">
+						<div class="form-inputs">
+							<div class="upload-photo">
+								<i class="fa-regular fa-image"></i><br>
+								<input type="file" name="photo" id="photo" accept="image/png, image/jpg" required>
+								<button>+ Ajouter photos</button>
+								<p>jpg, png : 4mo max</p>
+							</div>
+							<label for="title">Titre</label><br>
+							<input type="text" id="title" name="title" required><br>
+							<label for="category">Catégorie</label><br>
+							<div class="select-container">
+								<select id="category" name="category" required>
+									<option label=""></option>
+								</select>
+								<i class="fa-solid fa-chevron-down"></i>
+							</div>
+						</div>
+						<input class="btn-modal-add" type="submit" value="Valider">
+					</form>
+				</div>
 			</div>
 		</div>
 	</aside>

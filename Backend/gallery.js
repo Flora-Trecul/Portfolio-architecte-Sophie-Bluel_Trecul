@@ -45,7 +45,7 @@ function generateFiltersBar(categories, gallery) {
     const portfolio = document.getElementById("portfolio")
     const filtersBar = document.createElement("div")
     filtersBar.className = "filtersBar"
-    filtersBar.innerHTML = "<button class=\"filter\" data-cat=\"0\">Tous</button>"
+    filtersBar.innerHTML = "<button class=\"filter selected\" data-cat=\"0\">Tous</button>"
 
     // On crée un bouton pour chaque catégorie avec attribut data-id = propriété id de l'objet
     categories.forEach(category => {
@@ -61,11 +61,8 @@ function generateFiltersBar(categories, gallery) {
 
 // Fonction pour remplacer le contenu de la galerie quand on sélectionne un filtre
 function replaceGallery(works, gallery) {
-    // Si l'utilisateur clique sur un bouton sélectionné, la page ne change pas
-    if (gallery.childElementCount !== works.length) {
-        gallery.innerHTML = ""
-        works.forEach(work => {generateGallery(work, gallery)})
-    }
+    gallery.innerHTML = ""
+    works.forEach(work => {generateGallery(work, gallery)})
 }
 
 // Fonction pour filtrer les photos affichées selon le filtre sélectionné
@@ -87,18 +84,19 @@ function filterWorks(btnFilter, works, gallery) {
 function activateFilters(categories, gallery, works) {
     generateFiltersBar(categories, gallery)
 
-    const btnsFilters = document.querySelectorAll("button[class=\"filter\"]")
+    const btnsFilters = document.querySelectorAll(".filter")
     // On crée une variable pour enregistrer le filtre actif et pouvoir le désactiver si l'utilisateur change de filtre
-    let selectedFilter = null
+    let selectedFilter = btnsFilters[0]
     // Pour chaque bouton, on réagit au clic en ajoutant la classe "selected" ou en l'enlevant si elle est déjà activée
     btnsFilters.forEach(btnFilter => {
         btnFilter.addEventListener("click", () => {
-            if(selectedFilter) {
+            // Si le bouton cliqué était déjà sélectionné, il ne se passe rien
+            if(btnFilter !== selectedFilter) {
                 selectedFilter.classList.remove("selected")
+                btnFilter.classList.add("selected")
+                selectedFilter = btnFilter
+                filterWorks(btnFilter, works, gallery)
             }
-            btnFilter.classList.add("selected")
-            selectedFilter = btnFilter
-            filterWorks(btnFilter, works, gallery)
         })
     })
 }

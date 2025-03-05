@@ -318,9 +318,6 @@ strong {
 	display: none;
 }
 
-.edit {
-	display: block;
-}
 
 /* Ajout CSS pour fenêtre modale */
 
@@ -331,6 +328,7 @@ strong {
 	height: 100%;
 	background-color: rgba(0,0,0,0.3);
 }
+
 
 .modal {
 	position: fixed;
@@ -421,6 +419,7 @@ strong {
 	font-size: 10px;
 	top: 5%;
 	right: 5%;
+	cursor: pointer;
 }
 
 .btn-modal-add {

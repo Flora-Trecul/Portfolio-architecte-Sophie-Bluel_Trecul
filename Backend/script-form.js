@@ -1,7 +1,4 @@
-// On récupère le formulaire dans une variable car elle est utilisée par plusieurs fonctions
 const login = document.getElementById("loginForm")
-
-
 
 // Fonction pour traiter la réponse de l'API
 async function processAPIresponse(response) {
@@ -27,7 +24,6 @@ async function processAPIresponse(response) {
 // Fonction pour traiter la demande d'authentification de l'utilisateur
 function requestLogin() {
     login.addEventListener("submit", function(event) {
-        // On empêche le rechargement de la page en validant le formulaire
         event.preventDefault()
         // On récupère l'email et le mot de passe saisis par l'utilisateur
         const userID = {
@@ -43,8 +39,6 @@ function requestLogin() {
         }).then(function(response) {processAPIresponse(response)})
     })
 }
-
-
 
 // Appel à la fonction principale
 requestLogin()

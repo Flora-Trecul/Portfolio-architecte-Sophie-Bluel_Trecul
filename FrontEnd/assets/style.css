@@ -57,7 +57,7 @@ table {
 
 body {
 	margin: auto;
-	font-family: 'Work Sans' ;
+	font-family: 'Work Sans';
 	font-size: 14px;
 	background-color: #FFFEF8;
 	min-height: 100vh;
@@ -68,6 +68,10 @@ body {
 a {
 	color: inherit;
 	text-decoration: none;
+}
+
+main {
+	margin: 0 100px;
 }
 
 #header-main {
@@ -111,8 +115,10 @@ h2{
 
 nav ul {
 	display: flex;
+	justify-content: center;
 	align-items: center;
 	list-style-type: none;
+	gap: 25px;
 }
 
 nav li {
@@ -121,7 +127,7 @@ nav li {
 }
 
 li img {
-	height: 22px;
+	height: 18px;
 }
 
 li:hover {
@@ -130,29 +136,26 @@ li:hover {
 
 #introduction {
 	display: flex;
+	justify-content: flex-start;
+	gap: 70px;
 	align-items: center;
 }
 
-#introduction figure {
-	flex: 1;
-}
-
 #introduction img {
-	display: block;
-	margin: auto;
-	width: 80%;
+	width: 100%;
 }
 
 #introduction article {
-	flex: 1;
+	width: 85%;
 }
 
 #introduction h2 {
-	margin-bottom: 1em;
+	margin-bottom: 0.7em;
 }
 
 #introduction p {
-	margin-bottom: 0.5em;
+	margin-bottom: 1.2em;
+	line-height: 16px;
 }
 
 #portfolio h2 {
@@ -162,13 +165,18 @@ li:hover {
 .gallery {
 	width: 100%;
 	display: grid;
-	grid-template-columns: 1fr 1fr 1fr;
-	grid-column-gap: 20px;
-	grid-row-gap: 20px;
+	grid-template-columns: repeat(3, 1fr);
+	grid-column-gap: 18px;
+	grid-row-gap: 18px;
 }
 
 .gallery img {
 	width: 100%;
+}
+
+figcaption {
+	font-size: 13px;
+	padding-top: 5px;
 }
 
 /* Ajout du CSS pour la barre de filtres */
@@ -200,7 +208,7 @@ button.selected {
 }
 
 #contact, #login {
-	width: 33%;
+	width: 40%;
 	margin: auto;
 }
 
@@ -212,21 +220,21 @@ button.selected {
 	margin-bottom: 20px;
 }
 
-#contact form, #login form {
+form {
 	text-align: left;
-	margin-top:30px;
+	margin-top: 30px;
 	display: flex;
 	flex-direction: column;
 }
 
-#contact input, #login input {
+input, select {
 	height: 50px;
 	font-size: 1.2em;
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
 
-#contact label, #login label {
+label {
 	margin: 2em 0 1em 0;
 }
 
@@ -235,7 +243,7 @@ button.selected {
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
 
-input[type="submit"]{
+main input[type="submit"] {
 	font-family: 'Syne';
 	font-weight: 700;
 	color: white;
@@ -310,6 +318,187 @@ strong {
 	display: none;
 }
 
-.edit {
-	display: block;
+
+/* Ajout CSS pour fenêtre modale */
+
+#modal-container {
+	display: none;
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0,0,0,0.3);
+}
+
+
+.modal {
+	position: fixed;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%); /* left-top-transform : centrer la fenêtre modale sur l'écran*/
+	width: 50%;
+	max-width: 630px;
+	height: auto;
+	max-height: 75%;
+	border-radius: 10px;
+	background-color: white;
+	display: flex;
+	flex-direction: column;
+}
+
+.modal .close {
+	font-size: 24px;
+	font-weight: 600;
+	padding-top: 21px;
+	padding-right: 25px;
+	align-self: flex-end;
+}
+
+.close:hover {
+	cursor: pointer;
+}
+
+#modal-delete, #modal-add {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+#modal-add {
+	display: none;
+}
+
+.modal h2 {
+	font-family: 'Work Sans';
+	color: black;
+	font-size: 26px;
+	font-weight: 400;
+	margin-bottom: 1.5em;
+}
+
+.modal-content {
+	width: 100%;
+	max-width: 420px;
+	height: auto;
+}
+
+.gallery-modal, .form-inputs {
+	border-bottom: solid 1px #B3B3B3;
+	padding-bottom: 3.1em;
+	display: flex;
+}
+
+.form-inputs {
+	flex-direction: column;
+}
+
+.gallery-modal {
+	flex-wrap: wrap;
+	gap: 9px;
+	overflow: auto;
+}
+
+.gallery-modal figure {
+	width: calc(20% - 9px);
+	height: fit-content;
+	padding-bottom: 16px;
+	position: relative;
+}
+
+.gallery-modal img {
+	width: 100%;
+}
+
+.delete {
+	position: absolute;
+	color: white;
+	background-color: black;
+	border: none;
+	border-radius: 3px;
+	padding: 3px 5px;
+	font-size: 10px;
+	top: 5%;
+	right: 5%;
+	cursor: pointer;
+}
+
+.btn-modal-add {
+	font-family: 'Syne';
+	font-weight: 700;
+	font-size: 14px;
+	color: white;
+	background-color: #1D6154;
+	text-align: center;
+	border: none;
+	border-radius: 60px;
+	width: 60%;
+	max-width: 237px;
+	height: 36px;
+	flex-shrink: 0;
+	margin: 2.6em auto 3em auto;
+}
+
+#modal-add .btn-modal-add {
+	background-color: #A7A7A7;
+}
+
+#modal-add form {
+	margin-top: 0;
+}
+
+.select-container {
+	position: relative;
+	display: inline-block;
+}
+
+select {
+	background-color: white;
+	appearance: none;
+	width: 100%;
+}
+
+.fa-chevron-down {
+	position: absolute;
+	color: #6C6C6C;
+	font-size: 12px;
+	top: 50%;
+	transform: translateY(-50%);
+	right: 20px;
+	pointer-events: none; /* Pour que le clic sur l'icone ne bloque pas l'activation de liste déroulante */
+}
+
+.upload-photo {
+	background-color: #E8F1F6;
+	padding: 1.5em;
+	border-radius: 3px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 5px;
+}
+
+.upload-photo input {
+	display: none;
+}
+
+.upload-photo button {
+	background-color: #CBD6DC;
+	color: #306685;
+	border: none;
+	border-radius: 50px;
+	font-size: 14px;
+	font-family: 'Work Sans';
+	padding: 10px;
+	width: 50%;
+	max-width: 173px;
+}
+
+.fa-image {
+	color: #B9C5CC;
+	font-size: 65px;
+}
+
+.upload-photo p {
+	font-size: 10px;
+	color: #444444;
 }

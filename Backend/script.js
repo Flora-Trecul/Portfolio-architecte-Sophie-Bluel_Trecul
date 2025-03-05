@@ -9,11 +9,11 @@ const modalGallery = document.querySelector(".gallery-modal")
 const modal = document.getElementById("modal-container")
 
 // On importe la fonction externe qui permet de générer toutes les galeries (principale, modale et filtrée)
-import { generateGallery } from "./gallery.js"
+import { generateGallery } from "./gallery-filters.js"
 works.forEach(work => {generateGallery(work, gallery)})
 
 // On importe la fonction qui permet de générer et activer la barre de filtres
-import { activateFilters } from "./gallery.js"
+import { activateFilters } from "./gallery-filters.js"
 activateFilters(categories, gallery, works)
 
 // On importe la fonction qui permet d'afficher et gérer la modale

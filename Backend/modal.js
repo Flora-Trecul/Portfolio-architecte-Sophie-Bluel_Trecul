@@ -43,7 +43,7 @@ function deleteWork() {
 }
 
 // Fonction pour ouvrir la modale et générer la galerie
-import { generateGallery } from "./gallery.js"
+import { generateGallery } from "./gallery-filters.js"
 function openModal(modal, modalGallery, works) {
     // On affiche la modale en cliquant sur "modifier"
     const btnModal = document.querySelector("a[href=\"#modal\"]")
@@ -60,25 +60,37 @@ function openModal(modal, modalGallery, works) {
 }
 
 // Fonction pour cacher la modale et réinitialiser l'affichage par défaut de la fenêtre galerie
-function resetModal(modal, modalAdd, modalDelete) {
+function resetModal(modal, modalAdd, modalDelete, back) {
     if(modalAdd.style.display === "flex") {
         modalAdd.style.display = "none"
         modalDelete.style.display = "flex"
     }
-    modal.style.display = "none"
+    if(back === false) {
+        modal.style.display = "none"
+    }
 }
 
 // Fonction pour fermer la modale au clic sur la croix ou sur l'overlay
 function closeModal(modal, modalAdd, modalDelete) {
+    let back = false
+    // On retourne à l'affichage par défaut de la galerie en cliquant sur le bouton retour de la fenêtre "ajout"
+    const btnBack = document.querySelector(".back")
+    btnBack.addEventListener("click", () => {
+        back = true
+        resetModal(modal, modalAdd, modalDelete, back)
+        back = false
+    })
+
     // On ferme la modale en cliquant sur le bouton close
     const btnClose = document.querySelector(".close")
     btnClose.addEventListener("click", () => {
-        resetModal(modal, modalAdd, modalDelete)
+        resetModal(modal, modalAdd, modalDelete, back)
     })
+
     // On ferme la modale en cliquant sur l'overlay
     window.addEventListener("click", e => {
         if (e.target === modal) {
-            resetModal(modal, modalAdd, modalDelete)
+            resetModal(modal, modalAdd, modalDelete, back)
         }
     })
 }
@@ -103,11 +115,34 @@ function generateCategories(categories) {
 // Fonction pour afficher le formulaire d'ajout de photo en cliquant sur le bouton "Ajouter une photo"
 function displayformModal(modalAdd, modalDelete, categories) {
     const btnAddModal = document.querySelector(".btn-modal-add")
+    // Au clic sur le bouton, on cache la fenêtre de suppression et on affiche celle d'ajout
     btnAddModal.addEventListener("click", () => {
         modalDelete.style.display = "none"
         modalAdd.style.display = "flex"
 
         generateCategories(categories)
+
+        // Lorsque l'utilisateur charge une image on affiche cette image dans la div upload-photo
+        const btnUpload = document.getElementById("photo-input")
+        btnUpload.addEventListener("change", () => {
+            const uploadedImg = btnUpload.files[0]
+            
+            const divForm = document.querySelector(".upload-form")
+            divForm.style.display = "none"
+
+            const divUpload = document.querySelector(".upload-photo")
+            const newImg = document.createElement("img")
+            newImg.classList.add("preview")
+            newImg.file = uploadedImg
+            divUpload.innerHTML = ""
+            divUpload.appendChild(newImg)
+
+            const reader = new FileReader()
+            reader.onload = (e) => {
+                newImg.src = e.target.result
+            }
+            reader.readAsDataURL(uploadedImg)
+        })
     })
 }
 
@@ -131,8 +166,7 @@ export { activateEditMode }
 
 
 // Ce qu'il reste à faire : activer l'ajout de travaux
-// - ajouter un bouton "retour" sur la fenêtre "ajout" de la modale, qui renvoie à la fenêtre "suppression"
-// - activer l'upload d'une photo depuis le formulaire
+// - reset l'image chargée et le display du champ upload à la fermeture de la modale (ou au retour sur la fenêtre suppression)
 // - activer le bouton "Valider" quand tous les champs du formulaire sont remplis
 // - envoyer la requête POST à l'API en validant le formulaire (ne pas oublier ID et userID)
 // - afficher la nouvelle photo dans la galerie en rechargeant la page

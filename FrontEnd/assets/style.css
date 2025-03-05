@@ -348,12 +348,19 @@ strong {
 .modal .close {
 	font-size: 24px;
 	font-weight: 600;
-	padding-top: 21px;
+	padding-top: 20px;
 	padding-right: 25px;
 	align-self: flex-end;
 }
 
-.close:hover {
+.modal .back {
+	font-size: 16px;
+	position: absolute;
+	top: -20px;
+	left: 25px;
+}
+
+.close:hover, .back:hover {
 	cursor: pointer;
 }
 
@@ -366,6 +373,7 @@ strong {
 
 #modal-add {
 	display: none;
+	position: relative;
 }
 
 .modal h2 {
@@ -468,29 +476,41 @@ select {
 }
 
 .upload-photo {
+	max-height: 179px;
 	background-color: #E8F1F6;
-	padding: 1.5em;
 	border-radius: 3px;
+	text-align: center;
+}
+
+.upload-form {
+	padding: 1.5em;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	gap: 5px;
+
 }
 
-.upload-photo input {
+.upload-form input {
 	display: none;
 }
 
-.upload-photo button {
+#imgSelect {
 	background-color: #CBD6DC;
 	color: #306685;
 	border: none;
 	border-radius: 50px;
 	font-size: 14px;
 	font-family: 'Work Sans';
+	text-align: center;
 	padding: 10px;
 	width: 50%;
-	max-width: 173px;
+	max-width: 153px;
+	margin: 0;
+}
+
+#imgSelect:hover {
+	cursor: pointer;
 }
 
 .fa-image {
@@ -498,7 +518,12 @@ select {
 	font-size: 65px;
 }
 
-.upload-photo p {
+.upload-form p {
 	font-size: 10px;
 	color: #444444;
+}
+
+.preview {
+	height: 100%;
+	object-fit: contain;
 }

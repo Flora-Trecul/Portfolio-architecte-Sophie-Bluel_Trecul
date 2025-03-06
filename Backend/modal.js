@@ -1,3 +1,6 @@
+const works = await fetch("http://localhost:5678/api/works").then(works => works.json())
+
+
 
 // Fonction pour changer l'affichage de la page d'accueil en mode édition
 function displayEditMode() {
@@ -12,6 +15,7 @@ function displayEditMode() {
     loginLink.children[0].innerText = "logout"
     loginLink.addEventListener("click", () => {
         window.sessionStorage.removeItem("token")
+        window.sessionStorage.removeItem("userID")
     })
 }
 
@@ -51,9 +55,11 @@ function openModal(modal, modalGallery, works) {
     btnModal.addEventListener("click", () => {
         modal.style.display = "block"
         // À l'ouverture de la modale, on génère la galerie de miniatures si elle est vide
-        if(modalGallery.childElementCount === 0) {
-            works.forEach(work => {generateGallery(work, modalGallery)})
+        // On vérifie si la galerie est vide, si non on la vide avant de la remplir
+        if(modalGallery.childElementCount > 0) {
+            modalGallery.innerHTML = ""
         }
+        works.forEach(work => {generateGallery(work, modalGallery)})
         // Une fois la galerie générée, on active la suppression des travaux
         deleteWork()
     })
@@ -61,6 +67,7 @@ function openModal(modal, modalGallery, works) {
 
 // Fonction pour cacher la modale et réinitialiser l'affichage par défaut de la fenêtre galerie
 function resetModal(modal, modalAdd, modalDelete, back) {
+    resetForm()
     if(modalAdd.style.display === "flex") {
         modalAdd.style.display = "none"
         modalDelete.style.display = "flex"
@@ -112,6 +119,65 @@ function generateCategories(categories) {
     }
 }
 
+// Fonction pour créer un message d'erreur
+function addErrorMsg(errorText) {
+    const divForm = document.querySelector(".form-inputs")
+    const error = document.createElement("p")
+    error.classList.add("error-modal")
+    error.innerText = errorText
+    divForm.appendChild(error)
+}
+
+// Fonction pour enlever tous les messages d'erreur du formulaire
+function removeErrorMsg() {
+    const msgError = document.querySelector(".error-modal")
+    if (msgError !== null) {
+        msgError.remove()
+    }
+}
+
+// Fonction pour traiter la réponse de l'API à la demande d'ajout d'une nouvelle photo
+async function processAPIresponse(response) {
+    if(response.ok) {
+        response = await response.json()
+        // On ajoute une nouvelle figure dans la galerie principale + dans la galerie modale avec l'URL de l'image et son titre
+        // On récupère la galerie principale
+        const gallery = document.querySelector(".gallery")
+        // On crée une figure avec data-img = idphoto
+        const newFigure = document.createElement("figure")
+        newFigure.dataset.img = response.id
+        // On crée une img src = URL & alt = Title
+        const newImg = document.createElement("img")
+        newImg.src = response.imageUrl
+        newImg.alt = response.title
+        // On crée une figcaption = Title
+        const newCaption = document.createElement("figcaption")
+        newCaption.innerText = response.title
+        newFigure.appendChild(newImg)
+        newFigure.appendChild(newCaption)
+        gallery.appendChild(newFigure)
+        resetForm()
+    } else {
+        addErrorMsg("La demande d'ajout de photo n'a pas abouti.")
+        // Pas de reset car l'utilisateur doit voir le message d'erreur, il pourra reset en fermant la fenêtre
+    }
+}
+
+// Fonction pour reset le formulaire
+function resetForm() {
+    document.getElementById("modal-form").reset()
+    const preview = document.querySelector(".preview")
+    if(preview !== null) {
+        preview.remove()
+        document.querySelector(".upload-form").style.display = "flex"
+    }
+    const input = document.getElementById("photo-input")
+    if(input.files !== null) {
+        input.value = ""
+    }
+    removeErrorMsg()
+}
+
 // Fonction pour afficher le formulaire d'ajout de photo en cliquant sur le bouton "Ajouter une photo"
 function displayformModal(modalAdd, modalDelete, categories) {
     const btnAddModal = document.querySelector(".btn-modal-add")
@@ -124,24 +190,71 @@ function displayformModal(modalAdd, modalDelete, categories) {
 
         // Lorsque l'utilisateur charge une image on affiche cette image dans la div upload-photo
         const btnUpload = document.getElementById("photo-input")
-        btnUpload.addEventListener("change", () => {
-            const uploadedImg = btnUpload.files[0]
-            
-            const divForm = document.querySelector(".upload-form")
-            divForm.style.display = "none"
-
+        let imgUploaded = false
+        // On utilise onchange au lieu d'un eventListener pour que les instructions ne se dédoublent pas à chaque changement
+        btnUpload.onchange = () => {
             const divUpload = document.querySelector(".upload-photo")
-            const newImg = document.createElement("img")
-            newImg.classList.add("preview")
-            newImg.file = uploadedImg
-            divUpload.innerHTML = ""
-            divUpload.appendChild(newImg)
+            removeErrorMsg()
+            
+            // On vérifie qu'un fichier a bien été uploadé + qu'il respecte la taille et le format demandés
+            const uploadedImg = btnUpload.files[0]
+            if(!uploadedImg) {
+                addErrorMsg("Aucun fichier n'a été sélectionné")
+                return
+            } else if(uploadedImg.type !== "image/png" && uploadedImg.type !== "image/jpeg") {
+                addErrorMsg("Le fichier sélectionné n'est pas au format .png ou .jpg")
+                return
+            } else if(uploadedImg.size > 4*1024*1024) {
+                addErrorMsg("Le fichier dépasse la taille maximale de 4 Mo")
+                return
+            } else {
+                // Si l'image remplit les critères, on affiche un preview dans la zone d'upload
+                const divForm = document.querySelector(".upload-form")
+                divForm.style.display = "none"
 
-            const reader = new FileReader()
-            reader.onload = (e) => {
-                newImg.src = e.target.result
+                const previewImg = document.createElement("img")
+                previewImg.classList.add("preview")
+
+                const reader = new FileReader() // FileReader permet de lire le fichier uploadé
+                reader.readAsDataURL(uploadedImg) // On lit le fichier uploadé sous forme d'une URL de données, permettant au navigateur d'afficher l'image
+                reader.onload = (e) => {
+                    previewImg.src = e.target.result //e.target.result assigne le lien du fichier lu comme src de l'élément img
+                }
+
+                divUpload.appendChild(previewImg)
+                imgUploaded = true
             }
-            reader.readAsDataURL(uploadedImg)
+        }
+
+
+        // Validation du formulaire
+        const formModal = document.getElementById("modal-form")
+        formModal.addEventListener("submit", (event) => {
+            event.preventDefault()
+
+            const inputTitle = document.getElementById("title")
+            const inputCat = document.getElementById("category")
+
+            // On vérifie que les champs image, titre et catégorie sont remplis avant de valider le formulaire
+            if(inputTitle.value && inputCat.value && imgUploaded === true) {
+                removeErrorMsg()
+                // On envoie la requête à l'API pour ajouter la photo à la galerie
+                const inputCatID = inputCat.options[inputCat.selectedIndex].dataset.cat
+                const infosImg = new FormData()
+                infosImg.append("image", btnUpload.files[0])
+                infosImg.append("title", inputTitle.value)
+                infosImg.append("category", inputCatID)
+
+                fetch("http://localhost:5678/api/works", {
+                    method: "POST",
+                    headers: {"Authorization": `Bearer ${window.sessionStorage.getItem("token")}`},
+                    body: infosImg
+                }).then(response => {processAPIresponse(response)})
+            } else {
+                removeErrorMsg()
+                addErrorMsg("Tous les champs du formulaire doivent être remplis")
+            }
+            
         })
     })
 }
@@ -166,8 +279,8 @@ export { activateEditMode }
 
 
 // Ce qu'il reste à faire : activer l'ajout de travaux
-// - reset l'image chargée et le display du champ upload à la fermeture de la modale (ou au retour sur la fenêtre suppression)
-// - activer le bouton "Valider" quand tous les champs du formulaire sont remplis
-// - envoyer la requête POST à l'API en validant le formulaire (ne pas oublier ID et userID)
-// - afficher la nouvelle photo dans la galerie en rechargeant la page
+// - activer la couleur verte du bouton "Valider" quand tous les champs du formulaire sont remplis
 // - afficher la nouvelle photo instantanément dans la galerie principale et la galerie miniature
+// => actualiser la galerie en appuyant sur le bouton back
+// => si je ferme la modale puis que je l'ouvre, mes figure principale et figure modale n'ont pas le même ID, ce qui empêche la suppression
+// - optimiser tout le code

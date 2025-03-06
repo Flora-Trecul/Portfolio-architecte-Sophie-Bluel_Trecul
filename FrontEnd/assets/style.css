@@ -166,12 +166,14 @@ li:hover {
 	width: 100%;
 	display: grid;
 	grid-template-columns: repeat(3, 1fr);
-	grid-column-gap: 18px;
-	grid-row-gap: 18px;
+	gap: 18px;
 }
 
 .gallery img {
 	width: 100%;
+	height: auto;
+	max-height: 401px;
+	object-fit: cover;
 }
 
 figcaption {
@@ -295,6 +297,12 @@ strong {
 	margin-bottom: 2em;
 }
 
+.error-modal {
+	color: red;
+	text-align: center;
+	margin-top: 3.1em;
+}
+
 /* Ajout CSS pour page d'accueil en mode édition */
 
 .edit-mode {
@@ -408,13 +416,14 @@ strong {
 
 .gallery-modal figure {
 	width: calc(20% - 9px);
-	height: fit-content;
 	padding-bottom: 16px;
 	position: relative;
 }
 
 .gallery-modal img {
 	width: 100%;
+	max-height: 100px;
+	object-fit: cover;
 }
 
 .delete {

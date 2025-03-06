@@ -3,10 +3,12 @@ const login = document.getElementById("loginForm")
 // Fonction pour traiter la réponse de l'API
 async function processAPIresponse(response) {
     if(response.ok) {
-        // Si les identifiants sont valides, on stocke le tocken dans le sessionStorage
+        // Si les identifiants sont valides, on stocke le token et l'userID dans le sessionStorage
         response = await response.json()
         const token = response.token
+        const userID = response.userId
         window.sessionStorage.setItem("token", token)
+        window.sessionStorage.setItem("userID", userID)
         // Puis on renvoie l'utilisateur sur la page d'accueil
         window.location.href = "index.html"
     } else {
@@ -36,7 +38,7 @@ function requestLogin() {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: chargeUtile
-        }).then(function(response) {processAPIresponse(response)})
+        }).then(response => {processAPIresponse(response)})
     })
 }
 

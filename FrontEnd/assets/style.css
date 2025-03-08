@@ -335,6 +335,13 @@ strong {
 	width: 100%;
 	height: 100%;
 	background-color: rgba(0,0,0,0.3);
+	animation: dissolve .3s ease-out;
+}
+
+/* Animation à l'ouverture de la modale comme précisé sur la maquette */
+@keyframes dissolve {
+	from { opacity: 0; }
+	to { opacity: 1; }
 }
 
 

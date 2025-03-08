@@ -18,4 +18,4 @@ activateFilters(categories, gallery, works)
 
 // On importe la fonction qui permet d'afficher et gérer la modale
 import { activateEditMode } from "./modal.js"
-activateEditMode(modalGallery, works, modal, categories)
+activateEditMode(modalGallery, works, modal, categories, gallery, modalGallery)

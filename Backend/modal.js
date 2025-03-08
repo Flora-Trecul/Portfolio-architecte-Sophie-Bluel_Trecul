@@ -14,7 +14,6 @@ function displayEditMode() {
     loginLink.children[0].innerText = "logout"
     loginLink.addEventListener("click", () => {
         window.sessionStorage.removeItem("token")
-        window.sessionStorage.removeItem("userID")
     })
 }
 
@@ -27,40 +26,10 @@ function openModal(modal, modalGallery, works) {
     btnModal.addEventListener("click", () => {
         modal.style.display = "block"
         // À l'ouverture de la modale, on génère la galerie de miniatures si elle est vide
-        // On vérifie si la galerie est vide, si non on la vide avant de la remplir
-        if(modalGallery.childElementCount > 0) {
-            modalGallery.innerHTML = ""
+        // Si elle n'est pas vide on ne fait rien car les ajouts/suppressions sont gérés en temps réel
+        if(modalGallery.childElementCount === 0) {
+            works.forEach(work => {generateGallery(work, modalGallery)})
         }
-        works.forEach(work => {generateGallery(work, modalGallery)})
-        // Une fois la galerie générée, on active la suppression des travaux
-        deleteWork()
-    })
-}
-
-// Fonction pour activer la suppression d'une photo au clic sur le bouton supprimer
-function deleteWork() {
-    const btnDelete = document.querySelectorAll(".delete")
-    btnDelete.forEach(btn => {
-        btn.addEventListener("click", () => {
-            // On récupère l'id de la photo associée au bouton cliqué
-            const btnID = Number(btn.parentElement.dataset.img)
-            // On envoie une requête pour supprimer la photo
-            fetch(`http://localhost:5678/api/works/${btnID}`, {
-                method: "DELETE",
-                headers: {
-                    "Accept": "*/*",
-                    "Authorization": `Bearer ${window.sessionStorage.getItem("token")}`
-                }
-            }).then(async function(response) {
-                // Si la requête est acceptée, on supprime la photo associée au bouton dans les deux galeries
-                if(response.ok) {
-                    const figuresDelete = document.querySelectorAll(`figure[data-img="${btnID}"]`)
-                    figuresDelete.forEach(figure => {
-                        figure.remove()
-                    })
-                }
-            })
-        })
     })
 }
 
@@ -105,7 +74,7 @@ function resetModal(modal, modalAdd, modalDelete, back) {
 // FONCTIONS POUR LE FORMULAIRE
 
 // Fonction générale pour la gestion du formulaire
-function handleForm(categories) {
+function handleForm(categories, gallery, modalGallery) {
     const inputTitle = document.getElementById("title")
     const inputCat = document.querySelector("select")
     generateCategories(categories, inputCat)
@@ -136,7 +105,7 @@ function handleForm(categories) {
     const modalForm = document.getElementById("modal-form")
     // On utilise onsubmit pour la même raison que onchange (provoquait un décalage dans l'ID de la nouvelle photo)
     modalForm.onsubmit = (event) => {
-        validateModalForm(event, imgUploaded, btnUpload, inputTitle, inputCat)
+        validateModalForm(event, imgUploaded, btnUpload, inputTitle, inputCat, gallery, modalGallery)
     }
 }
 
@@ -234,19 +203,19 @@ function activateSubmitBtn(inputTitle, inputCat) {
 }
 
 // Fonction pour valider le formulaire d'ajout de photo
-function validateModalForm(event, imgUploaded, btnUpload, inputTitle, inputCat) {
+function validateModalForm(event, imgUploaded, btnUpload, inputTitle, inputCat, gallery, modalGallery) {
     event.preventDefault()
     removeErrorMsg()
     // On vérifie que les champs image, titre et catégorie sont remplis avant de valider le formulaire
     if(inputTitle.value && inputCat.value && imgUploaded === true) {
-        postRequestAPI(inputCat, inputTitle, btnUpload)
+        postRequestAPI(inputCat, inputTitle, btnUpload, gallery, modalGallery)
     } else {
         addErrorMsg("Tous les champs du formulaire doivent être remplis")
     }
 }
 
 // Fonction pour envoyer une requête d'ajout de photo à l'API
-function postRequestAPI(inputCat, inputTitle, btnUpload) {
+function postRequestAPI(inputCat, inputTitle, btnUpload, gallery, modalGallery) {
     // On envoie la requête à l'API pour ajouter la photo à la galerie
     const inputCatID = inputCat.options[inputCat.selectedIndex].dataset.cat
     const infosImg = new FormData()
@@ -258,29 +227,15 @@ function postRequestAPI(inputCat, inputTitle, btnUpload) {
         method: "POST",
         headers: {"Authorization": `Bearer ${window.sessionStorage.getItem("token")}`},
         body: infosImg
-    }).then(response => {processAPIresponse(response)})
+    }).then(response => {processAPIresponse(response, gallery, modalGallery)})
 }
 
 // Fonction pour traiter la réponse de l'API à la demande d'ajout d'une nouvelle photo
-async function processAPIresponse(response) {
+async function processAPIresponse(response, gallery, modalGallery) {
     if(response.ok) {
         response = await response.json()
-        // On ajoute une nouvelle figure dans la galerie principale + dans la galerie modale avec l'URL de l'image et son titre
-        // On récupère la galerie principale
-        const gallery = document.querySelector(".gallery")
-        // On crée une figure avec data-img = idphoto
-        const newFigure = document.createElement("figure")
-        newFigure.dataset.img = response.id
-        // On crée une img src = URL & alt = Title
-        const newImg = document.createElement("img")
-        newImg.src = response.imageUrl
-        newImg.alt = response.title
-        // On crée une figcaption = Title
-        const newCaption = document.createElement("figcaption")
-        newCaption.innerText = response.title
-        newFigure.appendChild(newImg)
-        newFigure.appendChild(newCaption)
-        gallery.appendChild(newFigure)
+        generateGallery(response, gallery)
+        generateGallery(response, modalGallery)
         resetForm()
     } else {
         addErrorMsg("La demande d'ajout de photo n'a pas abouti.")
@@ -305,19 +260,19 @@ function resetForm() {
 }
 
 // Fonction générale pour gérer la fenêtre modale d'ajout de photo
-function displayModalForm(modalAdd, modalDelete, categories) {
+function displayModalForm(modalAdd, modalDelete, categories, gallery, modalGallery) {
     const btnAddModal = document.querySelector(".btn-modal-add")
     // Au clic sur le bouton "Ajouter une photo", on cache la fenêtre de suppression et on affiche celle d'ajout
     btnAddModal.addEventListener("click", () => {
         modalDelete.style.display = "none"
         modalAdd.style.display = "flex"
 
-        handleForm(categories)
+        handleForm(categories, gallery, modalGallery)
     })
 }
 
 // Fonction principale pour afficher le mode édition et gérer la modale si un token est enregistré dans le sessionStorage
-function activateEditMode(modalGallery, works, modal, categories) {
+function activateEditMode(modalGallery, works, modal, categories, gallery) {
     if(window.sessionStorage.getItem("token") !== null) {
         displayEditMode()
         
@@ -328,14 +283,8 @@ function activateEditMode(modalGallery, works, modal, categories) {
         const modalAdd = document.getElementById("modal-add")
 
         closeModal(modal, modalAdd, modalDelete)
-        displayModalForm(modalAdd, modalDelete, categories)
+        displayModalForm(modalAdd, modalDelete, categories, gallery, modalGallery)
     }
 }
 
 export { activateEditMode }
-
-
-// Ce qu'il reste à faire : activer l'ajout de travaux
-// Afficher la nouvelle photo instantanément dans la galerie principale et la galerie modale
-// En cliquant sur le bouton retour, on doit voir la nouvelle photo et pouvoir la supprimer directement
-// Si je ferme la modale puis que je l'ouvre, mes figure principale et figure modale n'ont pas le même ID, ce qui empêche la suppression

@@ -1,5 +1,24 @@
-// const works = await fetch("http://localhost:5678/api/works").then(works => works.json())
+// Fonction principale pour afficher le mode édition et gérer la modale si un token est enregistré dans le sessionStorage
+function activateEditMode(works, categories, gallery) {
+    if(window.sessionStorage.getItem("token") !== null) {
+        displayEditMode()
+        
+        // On récupère la modale, les deux fenêtres de la modale et la galerie modale
+        const modalGallery = document.querySelector(".gallery-modal")
+        const modal = document.getElementById("modal-container")
+        const modalDelete = document.getElementById("modal-delete")
+        const modalAdd = document.getElementById("modal-add")
+    
+        openModal(modal, modalGallery, works)
+        closeModal(modal, modalAdd, modalDelete)
+        displayModalForm(modalAdd, modalDelete, categories, gallery, modalGallery)
+    }
+}
 
+export { activateEditMode }
+
+
+// FONCTIONS POUR LA FENETRE MODALE
 
 // Fonction pour changer l'affichage de la page d'accueil en mode édition
 function displayEditMode() {
@@ -11,9 +30,12 @@ function displayEditMode() {
 
     // On remplace le login par logout dans le menu et on déconnecte l'utilisateur s'il clique dessus
     const loginLink = document.querySelector("a[href=\"login.html\"]")
-    loginLink.children[0].innerText = "logout"
-    loginLink.addEventListener("click", () => {
+    loginLink.innerText = "logout"
+    loginLink.addEventListener("click", (event) => {
+        // On empêche l'activation du lien vers la page login et on actualise la page actuelle
+        event.preventDefault()
         window.sessionStorage.removeItem("token")
+        window.location.reload()
     })
 }
 
@@ -73,6 +95,18 @@ function resetModal(modal, modalAdd, modalDelete, back) {
 
 // FONCTIONS POUR LE FORMULAIRE
 
+// Fonction générale pour gérer la fenêtre modale d'ajout de photo
+function displayModalForm(modalAdd, modalDelete, categories, gallery, modalGallery) {
+    const btnAddModal = document.querySelector(".btn-modal-add")
+    // Au clic sur le bouton "Ajouter une photo", on cache la fenêtre de suppression et on affiche celle d'ajout
+    btnAddModal.addEventListener("click", () => {
+        modalDelete.style.display = "none"
+        modalAdd.style.display = "flex"
+
+        handleForm(categories, gallery, modalGallery)
+    })
+}
+
 // Fonction générale pour la gestion du formulaire
 function handleForm(categories, gallery, modalGallery) {
     const inputTitle = document.getElementById("title")
@@ -103,7 +137,6 @@ function handleForm(categories, gallery, modalGallery) {
 
     // Quand le formulaire est validé, on vérifie que tous les champs sont remplis et on envoie la requête le cas échéant
     const modalForm = document.getElementById("modal-form")
-    // On utilise onsubmit pour la même raison que onchange (provoquait un décalage dans l'ID de la nouvelle photo)
     modalForm.onsubmit = (event) => {
         validateModalForm(event, imgUploaded, btnUpload, inputTitle, inputCat, gallery, modalGallery)
     }
@@ -111,7 +144,7 @@ function handleForm(categories, gallery, modalGallery) {
 
 // Fonction pour générer les catégories comme éléments option dans l'élément select du formulaire
 function generateCategories(categories, inputCat) {
-    // On vérifie que la liste déroulante contient uniquement le champ vide par défaut défini dans le HTML
+    // On vérifie que la liste déroulante contient uniquement le champ vide par défaut pour ne pas créer de doublon
     if(inputCat.childElementCount === 1) {
         categories.forEach(category => {
             const optionCategory = document.createElement("option")
@@ -258,33 +291,3 @@ function resetForm() {
     removeErrorMsg()
     document.querySelector("#modal-add .btn-modal-add").removeAttribute("style")
 }
-
-// Fonction générale pour gérer la fenêtre modale d'ajout de photo
-function displayModalForm(modalAdd, modalDelete, categories, gallery, modalGallery) {
-    const btnAddModal = document.querySelector(".btn-modal-add")
-    // Au clic sur le bouton "Ajouter une photo", on cache la fenêtre de suppression et on affiche celle d'ajout
-    btnAddModal.addEventListener("click", () => {
-        modalDelete.style.display = "none"
-        modalAdd.style.display = "flex"
-
-        handleForm(categories, gallery, modalGallery)
-    })
-}
-
-// Fonction principale pour afficher le mode édition et gérer la modale si un token est enregistré dans le sessionStorage
-function activateEditMode(modalGallery, works, modal, categories, gallery) {
-    if(window.sessionStorage.getItem("token") !== null) {
-        displayEditMode()
-        
-        openModal(modal, modalGallery, works)
-
-        // Pour les fonctions liées à la fenêtre "ajout" de la modale, on récupère les deux fenêtres
-        const modalDelete = document.getElementById("modal-delete")
-        const modalAdd = document.getElementById("modal-add")
-
-        closeModal(modal, modalAdd, modalDelete)
-        displayModalForm(modalAdd, modalDelete, categories, gallery, modalGallery)
-    }
-}
-
-export { activateEditMode }

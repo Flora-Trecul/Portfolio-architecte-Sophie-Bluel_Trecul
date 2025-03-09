@@ -62,7 +62,7 @@ body {
 	background-color: #FFFEF8;
 	min-height: 100vh;
 	display: grid;
-	grid-template-rows: 1fr auto;
+	grid-template-rows: auto 1fr auto;
 }
 
 a {
@@ -71,24 +71,42 @@ a {
 }
 
 main {
-	margin: 0 100px;
-}
-
-#header-main {
 	max-width: 1140px;
 	width: 100%;
 	margin: auto;
-	margin-top: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 }
 
-.header-normal {
+header {
+	width: 100%;
+	margin: auto;
+	display: flex;
+	flex-direction: column;
+}
+
+.header-normal, .header-login {
+	align-self: center;
 	display: flex;
 	justify-content: space-between;
+	align-items: center;
 	padding: 30px 0 50px 0;
+	max-width: 1140px;
+	width: 100%;
+}
+
+.header-login {
+	flex-direction: row;
 }
 
 section {
 	padding: 50px 0;
+}
+
+#introduction, #portfolio {
+	width: 90%;
+	max-width: 950px;
 }
 
 h1{
@@ -210,7 +228,7 @@ button.selected {
 }
 
 #contact, #login {
-	width: 40%;
+	width: 33.3%;
 	margin: auto;
 }
 
@@ -353,7 +371,6 @@ strong {
 	width: 50%;
 	max-width: 630px;
 	height: auto;
-	max-height: 75%;
 	border-radius: 10px;
 	background-color: white;
 	display: flex;
@@ -540,6 +557,7 @@ select {
 }
 
 .preview {
-	height: 100%;
-	object-fit: contain;
+	width: 119px;
+	height: auto;
+	object-fit: cover;
 }

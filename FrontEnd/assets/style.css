@@ -190,7 +190,7 @@ li:hover {
 .gallery img {
 	width: 100%;
 	height: auto;
-	max-height: 401px;
+	max-height: 406px;
 	object-fit: cover;
 }
 
@@ -207,7 +207,6 @@ figcaption {
 	gap: 10px;
 }
 
-/* Affichage des boutons de filtres par défaut */
 .filter {
 	border-radius: 60px;
 	border: 1px solid #1D6154;
@@ -220,8 +219,6 @@ figcaption {
 	min-width: 100px;
 }
 
-/* Affichage des boutons de filtres lorsqu'ils sont sélectionnés
-(utilisation de toggle avec le JS pour ajouter ou enlever la classe selected */
 button.selected {
 	background-color: #1D6154;
 	color: white;
@@ -315,12 +312,6 @@ strong {
 	margin-bottom: 2em;
 }
 
-.error-modal {
-	color: red;
-	text-align: center;
-	margin-top: 3.1em;
-}
-
 /* Ajout CSS pour page d'accueil en mode édition */
 
 .edit-mode {
@@ -367,7 +358,7 @@ strong {
 	position: fixed;
 	left: 50%;
 	top: 50%;
-	transform: translate(-50%, -50%); /* left-top-transform : centrer la fenêtre modale sur l'écran*/
+	transform: translate(-50%, -50%); /* left-top-transform : centrer la fenêtre modale sur l'écran */
 	width: 50%;
 	max-width: 630px;
 	height: auto;
@@ -560,4 +551,10 @@ select {
 	width: 119px;
 	height: auto;
 	object-fit: cover;
+}
+
+.error-modal {
+	color: red;
+	text-align: center;
+	margin-top: 3.1em;
 }

@@ -221,6 +221,7 @@ function activateSubmitBtn(inputTitle, inputCat) {
     const btnSubmit = document.querySelector("#modal-add .btn-modal-add")
     // Si tous les champs sont remplis, on change la couleur du bouton (sauf si la couleur est déjà appliquée)
     if(imgFilled && titleFilled && catFilled) {
+        removeErrorMsg()
         if(btnSubmit.getAttribute("style") !== null) {
             return
         } else {

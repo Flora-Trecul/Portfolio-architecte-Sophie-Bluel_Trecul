@@ -13,43 +13,41 @@
 	<script type="module" src="../Backend/script.js"></script>
 </head>
 <body>
-	<aside>
-		<div id="modal-container">
-			<div class="modal">
-				<div class="close">&times;</div>
-				<div id="modal-delete">
-					<h2>Galerie photo</h2>
-					<div class="gallery-modal modal-content"></div>
-					<button class="btn-modal-add">Ajouter une photo</button>
-				</div>
-				<div id="modal-add">
-					<div class="back"><i class="fa-solid fa-arrow-left"></i></div>
-					<h2>Ajout photo</h2>
-					<form id="modal-form" class="modal-content">
-						<div class="form-inputs">
-							<div class="upload-photo">
-								<div class="upload-form">
-									<i class="fa-regular fa-image"></i><br>
-									<label id="imgSelect" for="photo-input">
-										+ Ajouter photos
-									</label>
-									<input type="file" name="photo" id="photo-input" accept="image/jpeg, image/png">
-									<p>jpg, png : 4mo max</p>
-								</div>
-							</div>
-							<label for="title">Titre</label><br>
-							<input type="text" id="title" name="title"><br>
-							<label for="category">Catégorie</label><br>
-							<div class="select-container">
-								<select id="category" name="category">
-									<option label=" "></option>
-								</select>
-								<i class="fa-solid fa-chevron-down"></i>
+	<aside id="modal-container">
+		<div class="modal">
+			<div class="close">&times;</div>
+			<div id="modal-delete">
+				<h2>Galerie photo</h2>
+				<div class="gallery-modal modal-content"></div>
+				<button class="btn-modal-add">Ajouter une photo</button>
+			</div>
+			<div id="modal-add">
+				<div class="back"><i class="fa-solid fa-arrow-left"></i></div>
+				<h2>Ajout photo</h2>
+				<form id="modal-form" class="modal-content">
+					<div class="form-inputs">
+						<div class="upload-photo">
+							<div class="upload-form">
+								<i class="fa-regular fa-image"></i><br>
+								<label id="imgSelect" for="photo-input">
+									+ Ajouter photos
+								</label>
+								<input type="file" name="photo" id="photo-input" accept="image/jpeg, image/png">
+								<p>jpg, png : 4mo max</p>
 							</div>
 						</div>
-						<input class="btn-modal-add" type="submit" value="Valider">
-					</form>
-				</div>
+						<label for="title">Titre</label><br>
+						<input type="text" id="title" name="title"><br>
+						<label for="category">Catégorie</label><br>
+						<div class="select-container">
+							<select id="category" name="category">
+								<option label=" "></option>
+							</select>
+							<i class="fa-solid fa-chevron-down"></i>
+						</div>
+					</div>
+					<input class="btn-modal-add" type="submit" value="Valider">
+				</form>
 			</div>
 		</div>
 	</aside>

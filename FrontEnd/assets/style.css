@@ -499,20 +499,25 @@ select {
 	pointer-events: none; /* Pour que le clic sur l'icone ne bloque pas l'activation de liste déroulante */
 }
 
+.upload-form {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 5px;
+	height: 169px;
+}
+
 .upload-photo {
-	max-height: 179px;
+	height: 100%;
 	background-color: #E8F1F6;
 	border-radius: 3px;
 	text-align: center;
 }
 
-.upload-form {
-	padding: 1.5em;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	gap: 5px;
-
+.preview {
+	width: auto;
+	height: 169px;
 }
 
 .upload-form input {
@@ -545,12 +550,6 @@ select {
 .upload-form p {
 	font-size: 10px;
 	color: #444444;
-}
-
-.preview {
-	width: 119px;
-	height: auto;
-	object-fit: cover;
 }
 
 .error-modal {

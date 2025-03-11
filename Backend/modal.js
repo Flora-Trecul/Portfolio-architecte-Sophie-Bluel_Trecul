@@ -40,7 +40,7 @@ function displayEditMode() {
 }
 
 // Fonction générale pour ouvrir la modale, générer la galerie modale et activer la suppression de photos
-import { generateGallery } from "./gallery-filters.js"
+import { generateFigure } from "./gallery-filters.js"
 function openModal(modal, modalGallery, works) {
     // On affiche la modale en cliquant sur "modifier"
     const btnModal = document.querySelector("a[href=\"#modal\"]")
@@ -50,7 +50,7 @@ function openModal(modal, modalGallery, works) {
         // À l'ouverture de la modale, on génère la galerie de miniatures si elle est vide
         // Si elle n'est pas vide on ne fait rien car les ajouts/suppressions sont gérés en temps réel
         if(modalGallery.childElementCount === 0) {
-            works.forEach(work => {generateGallery(work, modalGallery)})
+            works.forEach(work => {generateFigure(work, modalGallery)})
         }
     })
 }
@@ -268,8 +268,8 @@ function postRequestAPI(inputCat, inputTitle, btnUpload, gallery, modalGallery) 
 async function processAPIresponse(response, gallery, modalGallery) {
     if(response.ok) {
         response = await response.json()
-        generateGallery(response, gallery)
-        generateGallery(response, modalGallery)
+        generateFigure(response, gallery)
+        generateFigure(response, modalGallery)
         resetForm()
     } else {
         addErrorMsg("La demande d'ajout de photo n'a pas abouti.")

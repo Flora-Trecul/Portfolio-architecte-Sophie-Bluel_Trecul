@@ -6,12 +6,12 @@ const categories = await fetch("http://localhost:5678/api/categories").then(cate
 const gallery = document.querySelector(".gallery")
 
 // On importe la fonction externe qui permet de générer la galerie
-import { generateGallery } from "./gallery-filters.js"
-works.forEach(work => {generateGallery(work, gallery)})
+import { generateFigure } from "./gallery-filters.js"
+works.forEach(work => {generateFigure(work, gallery)})
 
 // On importe la fonction qui permet de générer et activer la barre de filtres
 import { activateFilters } from "./gallery-filters.js"
-activateFilters(categories, gallery, works)
+activateFilters(categories, gallery)
 
 // On importe la fonction qui permet d'afficher et gérer la modale
 import { activateEditMode } from "./modal.js"

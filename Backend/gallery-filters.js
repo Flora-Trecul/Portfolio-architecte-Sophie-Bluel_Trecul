@@ -1,5 +1,5 @@
 // Fonction principale pour ajouter chaque objet de l'API works à la galerie
-function generateGallery(work, gallery) {
+function generateFigure(work, gallery) {
     // On crée un élément HTML figure avec attribut data-id = propriété id de l'objet
     const figureWork = document.createElement("figure")
     figureWork.dataset.img = work.id
@@ -11,17 +11,19 @@ function generateGallery(work, gallery) {
 
     figureWork.appendChild(imgWork)
 
-    // Si on génère la galerie de la modale, on ajoute un bouton à chaque image, sinon on ajoute une légende
+    // Si on génère la galerie de la modale, on ajoute un bouton à chaque image, sinon on ajoute une légende et la catégorie
     if(gallery === document.querySelector(".gallery-modal")) {
         generateDeleteBtn(figureWork)
     } else {
+        // On vérifie si l'objet possède une clé category (cas général), sinon on utilise categoryId (cas d'ajout de photos)
+        figureWork.dataset.cat = work.category?.id ?? work.categoryId
         generateFigcaption(work, figureWork)
     }
 
     gallery.appendChild(figureWork)
 }
 
-export { generateGallery }
+export { generateFigure }
 
 // Fonction pour créer une légende pour chaque image de la galerie principale
 function generateFigcaption(work, figure) {
@@ -66,7 +68,7 @@ function deleteWork(btn) {
 
 
 // Fonction générale pour la génération des filtres et l'activation au clic 
-function activateFilters(categories, gallery, works) {
+function activateFilters(categories, gallery) {
     generateFiltersBar(categories, gallery)
 
     const btnsFilters = document.querySelectorAll(".filter")
@@ -80,7 +82,7 @@ function activateFilters(categories, gallery, works) {
                 selectedFilter.classList.remove("selected")
                 btnFilter.classList.add("selected")
                 selectedFilter = btnFilter
-                filterWorks(btnFilter, works, gallery)
+                filterWorks(btnFilter)
             }
         })
     })
@@ -109,22 +111,18 @@ function generateFiltersBar(categories, gallery) {
 }
 
 // Fonction pour filtrer les photos affichées selon le filtre sélectionné
-function filterWorks(btnFilter, works, gallery) {
+function filterWorks(btnFilter) {
     const btnCat = Number(btnFilter.dataset.cat)
-    // On vérifie si l'utilisateur a appuyé sur "Tous", dans ce cas on affiche toutes les photos
-    if (btnCat === 0) {
-        replaceGallery(works, gallery)
-    // Sinon, on affiche uniquement les photos qui ont la même catégorie que le bouton sélectionné
-    } else {
-        const worksFiltered = works.filter(function (work) {
-            return work.category.id === btnCat
-        })
-        replaceGallery(worksFiltered, gallery)
-    }
-}
+    const figures = document.querySelectorAll(".gallery figure")
 
-// Fonction pour remplacer le contenu de la galerie quand on sélectionne un filtre
-function replaceGallery(works, gallery) {
-    gallery.innerHTML = ""
-    works.forEach(work => {generateGallery(work, gallery)})
+    figures.forEach(figure => {
+        // On annule le display "none" des éventuelles photos précédemment masquées
+        if (figure.style.display === "none") {
+            figure.removeAttribute("style")
+        }
+        // Si l'utilisateur n'a pas appuyé sur "Tous", on masque les photos ne correspondant pas à la catégorie choisie
+        if (btnCat !== 0 && Number(figure.dataset.cat) !== btnCat) {
+            figure.style.display = "none"
+        }
+    })
 }

@@ -6,7 +6,8 @@ function generateFigure(work, gallery) {
 
     // On crée un élément img avec attribut src = propriété imageUrl de l'objet + attribut alt = propriété title
     const imgWork = document.createElement("img")
-    imgWork.src = work.imageUrl
+	const hostedURL = work.imageUrl.replace("http://localhost:5678", "https://portfolio-architecte-sophie-bluel-trecul.onrender.com")
+    imgWork.src = hostedURL
     imgWork.alt = work.title
 
     figureWork.appendChild(imgWork)

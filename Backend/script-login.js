@@ -15,7 +15,7 @@ function requestLogin() {
             }
             const chargeUtile = JSON.stringify(userID)
             // On envoie la requête d'authentification à l'API
-            fetch("http://localhost:5678/api/users/login", {
+            fetch("https://portfolio-architecte-sophie-bluel-trecul.onrender.com/api/users/login", {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
                 body: chargeUtile

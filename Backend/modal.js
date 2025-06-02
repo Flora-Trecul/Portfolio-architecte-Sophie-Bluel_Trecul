@@ -257,7 +257,7 @@ function postRequestAPI(inputCat, inputTitle, btnUpload, gallery, modalGallery) 
     infosImg.append("title", inputTitle.value)
     infosImg.append("category", inputCatID)
 
-    fetch("http://localhost:5678/api/works", {
+    fetch("https://portfolio-architecte-sophie-bluel-trecul.onrender.com/api/works", {
         method: "POST",
         headers: {"Authorization": `Bearer ${window.sessionStorage.getItem("token")}`},
         body: infosImg

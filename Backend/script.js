@@ -1,7 +1,7 @@
 // On récupère les travaux depuis l'API
-const works = await fetch("http://localhost:5678/api/works").then(works => works.json())
+const works = await fetch("https://portfolio-architecte-sophie-bluel-trecul.onrender.com/api/works").then(works => works.json())
 // On récupère les catégories depuis l'API
-const categories = await fetch("http://localhost:5678/api/categories").then(categories => categories.json())
+const categories = await fetch("https://portfolio-architecte-sophie-bluel-trecul.onrender.com/api/categories").then(categories => categories.json())
 // On récupère la galerie principale
 const gallery = document.querySelector(".gallery")
 

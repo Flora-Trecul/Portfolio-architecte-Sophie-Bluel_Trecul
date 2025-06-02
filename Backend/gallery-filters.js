@@ -48,7 +48,7 @@ function deleteWork(btn) {
         // On récupère l'id de la photo associée au bouton cliqué
         const btnID = Number(btn.parentElement.dataset.img)
         // On envoie une requête pour supprimer la photo
-        fetch(`http://localhost:5678/api/works/${btnID}`, {
+        fetch(`https://portfolio-architecte-sophie-bluel-trecul.onrender.com/api/works/${btnID}`, {
             method: "DELETE",
             headers: {
                 "Accept": "*/*",

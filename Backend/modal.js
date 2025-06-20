@@ -113,15 +113,12 @@ function handleForm(categories, gallery, modalGallery) {
     const inputCat = document.querySelector("select")
     generateCategories(categories, inputCat)
 
-    // Variable qui permettra de valider le formulaire s'il y a bien une image valide uploadée par l'utilisateur
-    let imgUploaded = false
-
     // Quand un fichier est uploadé, on vérifie qu'il est valide et on affiche un preview le cas échéant
     const btnUpload = document.getElementById("photo-input")
     // On utilise onchange au lieu d'un eventListener pour que les instructions ne se dédoublent pas à chaque upload
     btnUpload.onchange = () => {
         removeErrorMsg()
-        imgUploaded = checkUploadedImg(btnUpload)
+        checkUploadedImg(btnUpload)
         activateSubmitBtn(inputTitle, inputCat)
     }
 
@@ -138,7 +135,7 @@ function handleForm(categories, gallery, modalGallery) {
     // Quand le formulaire est validé, on vérifie que tous les champs sont remplis et on envoie la requête le cas échéant
     const modalForm = document.getElementById("modal-form")
     modalForm.onsubmit = (event) => {
-        validateModalForm(event, imgUploaded, btnUpload, inputTitle, inputCat, gallery, modalGallery)
+        validateModalForm(event, btnUpload, inputTitle, inputCat, gallery, modalGallery)
     }
 }
 
@@ -190,7 +187,6 @@ function checkUploadedImg(btnUpload) {
         return
     } else {
         displayPreview(uploadedImg)
-        return true
     }
 }
 
@@ -210,6 +206,21 @@ function displayPreview(uploadedImg) {
     }
 
     divUpload.appendChild(previewImg)
+
+	deletePreview()
+}
+
+function deletePreview() {
+	const btnPreview = document.querySelector(".delete-preview")
+	btnPreview.style.display = "initial"
+
+	btnPreview.addEventListener("click", () => {
+		resetPreview()
+		const btnSubmit = document.querySelector("#modal-add .btn-modal-add")
+		if (btnSubmit.getAttribute("style") !== null) {
+			btnSubmit.removeAttribute("style")
+		}
+	})
 }
 
 // Fonction pour changer la couleur du bouton Valider si le formulaire est prêt à être envoyé
@@ -237,11 +248,11 @@ function activateSubmitBtn(inputTitle, inputCat) {
 }
 
 // Fonction pour valider le formulaire d'ajout de photo
-function validateModalForm(event, imgUploaded, btnUpload, inputTitle, inputCat, gallery, modalGallery) {
+function validateModalForm(event, btnUpload, inputTitle, inputCat, gallery, modalGallery) {
     event.preventDefault()
     removeErrorMsg()
     // On vérifie que les champs image, titre et catégorie sont remplis avant de valider le formulaire
-    if(inputTitle.value && inputCat.value && imgUploaded === true) {
+    if(inputTitle.value && inputCat.value && btnUpload.value) {
         postRequestAPI(inputCat, inputTitle, btnUpload, gallery, modalGallery)
     } else {
         addErrorMsg("Tous les champs du formulaire doivent être remplis")
@@ -280,15 +291,20 @@ async function processAPIresponse(response, gallery, modalGallery) {
 // Fonction pour reset le formulaire
 function resetForm() {
     document.getElementById("modal-form").reset()
-    const preview = document.querySelector(".preview")
-    if(preview !== null) {
-        preview.remove()
-        document.querySelector(".upload-form").style.display = "flex"
-    }
-    const input = document.getElementById("photo-input")
-    if(input.files !== null) {
-        input.value = ""
-    }
+    resetPreview()
     removeErrorMsg()
     document.querySelector("#modal-add .btn-modal-add").removeAttribute("style")
+}
+
+function resetPreview() {
+	const preview = document.querySelector(".preview")
+	if(preview !== null) {
+		preview.remove()
+		document.querySelector(".upload-form").style.display = "flex"
+		document.querySelector(".delete-preview").style.display = "none"
+	}
+	const input = document.getElementById("photo-input")
+    if(input.files !== null) {
+        input.value = null
+    }
 }

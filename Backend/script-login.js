@@ -14,16 +14,33 @@ function requestLogin() {
                 password: userPassword,
             }
             const chargeUtile = JSON.stringify(userID)
+
             // On envoie la requête d'authentification à l'API
-            fetch("http://localhost:5678/api/users/login", {
-                method: "POST",
-                headers: {"Content-Type": "application/json"},
-                body: chargeUtile
-            }).then(response => {processAPIresponse(response, login)})
+			fetchWithTimeout("http://localhost:5678/api/users/login", {
+				method: "POST",
+				headers: {"Content-Type": "application/json"},
+				body: chargeUtile,
+				timeout: 8000
+			})
+			.then(response => {processAPIresponse(response, login)})
+			.catch(() => showErrorMsg("La demande d'authentification n'a pas abouti", login))
         } else {
             showErrorMsg("Tous les champs doivent être remplis", login)
         }
     })
+}
+
+// Fonction pour envoyer une requête à l'API en annulant la requête si la réponse de l'API est trop lente
+async function fetchWithTimeout(URL, options = {}) {
+	const { timeout = 8000 } = options
+	const controller = new AbortController()
+	const timer = setTimeout(() => controller.abort(), timeout)
+	const response = await fetch (URL, {
+		...options,
+		signal: controller.signal
+	})
+	clearTimeout(timer)
+	return response
 }
 
 // Fonction pour traiter la réponse de l'API

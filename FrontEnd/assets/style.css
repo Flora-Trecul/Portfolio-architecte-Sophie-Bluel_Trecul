@@ -513,11 +513,21 @@ select {
 	background-color: #E8F1F6;
 	border-radius: 3px;
 	text-align: center;
+	position: relative;
 }
 
 .preview {
 	width: auto;
 	height: 169px;
+}
+
+.delete-preview {
+	cursor: pointer;
+	display: none;
+	position: absolute;
+	font-size: 12px;
+	right: 25px;
+	bottom: 10px;
 }
 
 .upload-form input {

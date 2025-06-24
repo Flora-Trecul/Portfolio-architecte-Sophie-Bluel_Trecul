@@ -46,24 +46,27 @@ function generateDeleteBtn(figure) {
 // Fonction pour activer le bouton suppression des miniatures dans la galerie modale
 function deleteWork(btn) {
     btn.addEventListener("click", () => {
-        // On récupère l'id de la photo associée au bouton cliqué
-        const btnID = Number(btn.parentElement.dataset.img)
-        // On envoie une requête pour supprimer la photo
-        fetch(`https://portfolio-architecte-sophie-bluel-trecul.onrender.com/api/works/${btnID}`, {
-            method: "DELETE",
-            headers: {
-                "Accept": "*/*",
-                "Authorization": `Bearer ${window.sessionStorage.getItem("token")}`
-            }
-        }).then(async function(response) {
-            // Si la requête est acceptée, on supprime la photo associée au bouton dans les deux galeries
-            if(response.ok) {
-                const figuresDelete = document.querySelectorAll(`figure[data-img="${btnID}"]`)
-                figuresDelete.forEach(figure => {
-                    figure.remove()
-                })
-            }
-        })
+		// On demande confirmation que l'utilisateur veut bien supprimer la photo
+		if (confirm("Voulez-vous vraiment supprimer cette photo ?")) {
+			// On récupère l'id de la photo associée au bouton cliqué
+			const btnID = Number(btn.parentElement.dataset.img)
+			// On envoie une requête pour supprimer la photo
+			fetch(`https://portfolio-architecte-sophie-bluel-trecul.onrender.com/api/works/${btnID}`, {
+				method: "DELETE",
+				headers: {
+					"Accept": "*/*",
+					"Authorization": `Bearer ${window.sessionStorage.getItem("token")}`
+				}
+			}).then(async function(response) {
+				// Si la requête est acceptée, on supprime la photo associée au bouton dans les deux galeries
+				if(response.ok) {
+					const figuresDelete = document.querySelectorAll(`figure[data-img="${btnID}"]`)
+					figuresDelete.forEach(figure => {
+						figure.remove()
+					})
+				}
+			})
+		}
     })
 }
 
